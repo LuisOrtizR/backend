@@ -18,6 +18,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   roles UserRole[] @relation("UserRoles")
+
+  passwordResets PasswordReset[] // ← Esto es lo que faltaba
 }
 
 model Role {
@@ -38,4 +40,14 @@ model UserRole {
   role Role @relation("UserRoles", fields: [roleId], references: [id], onDelete: Cascade)
 
   @@unique([userId, roleId])
+}
+
+model PasswordReset {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
