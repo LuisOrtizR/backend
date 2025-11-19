@@ -11,8 +11,7 @@ import { ReqUser } from '../auth/req-user.decorator';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // ==================== ADMIN ENDPOINTS ====================
-
+  // ADMIN ENDPOINTS
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true }))
   async create(@Body() body: CreateUserDto) {
@@ -51,15 +50,13 @@ export class UsersController {
     return { message: 'User deleted successfully', user };
   }
 
-  // ==================== PROFILE ENDPOINTS ====================
-
+  // PROFILE endpoints
   @UseGuards(JwtAuthGuard)
-@Get('me/profile')
-async getProfile(@ReqUser() user: any) {
-  const profile = await this.usersService.getProfile(user.userId);
-  return { message: 'User profile fetched successfully', user: profile };
-}
-
+  @Get('me/profile')
+  async getProfile(@ReqUser() user: any) {
+    const profile = await this.usersService.getProfile(user.userId);
+    return { message: 'User profile fetched successfully', user: profile };
+  }
 
   @UseGuards(JwtAuthGuard)
   @Patch('me/profile')

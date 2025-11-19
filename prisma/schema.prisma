@@ -19,7 +19,7 @@ model User {
 
   roles UserRole[] @relation("UserRoles")
 
-  passwordResets PasswordReset[] // ← Esto es lo que faltaba
+  passwordResets PasswordReset[]
 }
 
 model Role {
@@ -27,7 +27,8 @@ model Role {
   name        String  @unique
   description String?
 
-  users UserRole[] @relation("UserRoles")
+  users       UserRole[]       @relation("UserRoles")
+  permissions RolePermission[]
 }
 
 model UserRole {
@@ -40,6 +41,26 @@ model UserRole {
   role Role @relation("UserRoles", fields: [roleId], references: [id], onDelete: Cascade)
 
   @@unique([userId, roleId])
+}
+
+model Permission {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+
+  roles       RolePermission[]
+}
+
+model RolePermission {
+  id           String @id @default(uuid())
+
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
 }
 
 model PasswordReset {

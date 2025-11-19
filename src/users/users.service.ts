@@ -7,6 +7,20 @@ import { Prisma } from '@prisma/client';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private userInclude = {
+    roles: {
+      include: {
+        role: {
+          include: {
+            permissions: {
+              include: { permission: true }
+            }
+          }
+        }
+      }
+    }
+  };
+
   // Crear usuario con rol
   async createUser(email: string, password: string, roleId: string) {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -18,23 +32,26 @@ export class UsersService {
           password: hashedPassword,
           roles: { create: { roleId } },
         },
-        include: { roles: { include: { role: true } } },
+        include: this.userInclude,
       });
 
       return user;
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
         throw new BadRequestException(`The email "${email}" is already registered`);
       }
       throw error;
     }
   }
 
-  // Obtener todos los usuarios activos con roles
+  // Obtener todos los usuarios
   async findAll() {
     return await this.prisma.user.findMany({
       where: { isActive: true },
-      include: { roles: { include: { role: true } } },
+      include: this.userInclude,
     });
   }
 
@@ -42,15 +59,18 @@ export class UsersService {
   async findOne(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      include: { roles: { include: { role: true } } },
+      include: this.userInclude,
     });
+
     if (!user) throw new NotFoundException(`User with ID "${id}" not found`);
+
     return user;
   }
 
-  // Actualizar usuario por ID
+  // Actualizar usuario
   async update(id: string, data: { email?: string; password?: string; roleId?: string }) {
     const updateData: any = {};
+
     if (data.email) updateData.email = data.email;
     if (data.password) updateData.password = await bcrypt.hash(data.password, 10);
 
@@ -58,7 +78,7 @@ export class UsersService {
       const updatedUser = await this.prisma.user.update({
         where: { id },
         data: updateData,
-        include: { roles: { include: { role: true } } },
+        include: this.userInclude,
       });
 
       if (data.roleId) {
@@ -66,9 +86,12 @@ export class UsersService {
         await this.prisma.userRole.create({ data: { userId: id, roleId: data.roleId } });
       }
 
-      return updatedUser;
+      return this.findOne(id);
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
         throw new BadRequestException(`The email "${data.email}" is already in use`);
       }
       throw error;
@@ -80,7 +103,7 @@ export class UsersService {
     return await this.prisma.user.update({
       where: { id },
       data: { isActive: false },
-      include: { roles: { include: { role: true } } },
+      include: this.userInclude,
     });
   }
 
@@ -89,32 +112,35 @@ export class UsersService {
     return await this.prisma.user.delete({ where: { id } });
   }
 
-  // Obtener perfil del usuario autenticado
+  // Perfil del usuario autenticado
   async getProfile(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      include: { roles: { include: { role: true } } },
+      include: this.userInclude,
     });
+
     if (!user) throw new NotFoundException(`Profile not found for user ID "${userId}"`);
     return user;
   }
 
-  // Actualizar perfil propio
+  // Actualizar perfil
   async updateProfile(userId: string, data: { email?: string; password?: string }) {
     const updateData: any = {};
+
     if (data.email) updateData.email = data.email;
     if (data.password) updateData.password = await bcrypt.hash(data.password, 10);
 
     try {
-      const updatedUser = await this.prisma.user.update({
+      return await this.prisma.user.update({
         where: { id: userId },
         data: updateData,
-        include: { roles: { include: { role: true } } },
+        include: this.userInclude,
       });
-
-      return updatedUser;
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
         throw new BadRequestException(`The email "${data.email}" is already in use`);
       }
       throw error;

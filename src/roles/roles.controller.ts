@@ -7,16 +7,30 @@ import { AssignRoleDto } from './dto/assign-role.dto';
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
+  // Crear rol
   @Post()
   create(@Body() dto: CreateRoleDto) {
     return this.rolesService.create(dto.name, dto.description);
   }
 
+  // Listar roles con permisos
   @Get()
   findAll() {
     return this.rolesService.findAll();
   }
 
+  // 🔥 Rutas específicas primero (evita conflictos con :id)
+  @Post('assign')
+  assignRole(@Body() dto: AssignRoleDto) {
+    return this.rolesService.assignRoleToUser(dto.userId, dto.roleId);
+  }
+
+  @Delete('remove')
+  removeRole(@Body() dto: AssignRoleDto) {
+    return this.rolesService.removeRoleFromUser(dto.userId, dto.roleId);
+  }
+
+  // 🔥 Luego las rutas dinámicas con :id
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.rolesService.findById(id);
@@ -30,10 +44,5 @@ export class RolesController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.rolesService.remove(id);
-  }
-
-  @Post('assign')
-  assignRole(@Body() dto: AssignRoleDto) {
-    return this.rolesService.assignRoleToUser(dto.userId, dto.roleId);
   }
 }
