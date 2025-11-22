@@ -1,186 +1,302 @@
-🛒 E-Commerce Backend
-API REST empresarial construida con NestJS + Prisma + MySQL
+# 🛍️ E-Commerce Backend API
 
-Un backend moderno, escalable y robusto para e-commerce, diseñado con arquitectura profesional, autenticación segura, manejo de inventario, órdenes, usuarios y notificaciones por correo.
+<div align="center">
 
-🚀 Características principales
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
 
-✔️ Autenticación segura con JWT
+**Sistema backend robusto y escalable para plataforma e-commerce**
 
-✔️ Gestión completa de productos
+[Características](#-características) • [Instalación](#-instalación) • [Configuración](#️-configuración) • [API](#-endpoints-principales) • [Desarrollo](#-desarrollo)
 
-✔️ Carrito + Órdenes + Estados
+</div>
 
-✔️ Control de inventario automático
+---
 
-✔️ Envío de correos (Nodemailer)
+## 📋 Descripción
 
-✔️ Prisma ORM + MySQL
+API RESTful completa para e-commerce construida con **NestJS** y **TypeScript**, implementando arquitectura modular, autenticación JWT, sistema de permisos basado en roles (RBAC) y gestión integral de productos y órdenes.
 
-✔️ Arquitectura modular y escalable
+## ✨ Características
 
-✔️ Validación estricta con DTOs + Pipes
+### 🔐 Autenticación y Seguridad
+- **JWT Authentication** - Tokens seguros con refresh token
+- **Recuperación de contraseña** - Sistema de reset por email
+- **Bcrypt** - Hash seguro de contraseñas
+- **Guards personalizados** - Protección de rutas
 
-✔️ Listo para producción (Docker optional)
+### 👥 Sistema de Usuarios y Permisos
+- **RBAC completo** - Roles y permisos granulares
+- **Gestión de usuarios** - CRUD completo
+- **Permisos dinámicos** - Asignación flexible de capacidades
+- **Decoradores personalizados** - `@ReqUser()` para obtener usuario autenticado
 
-🧱 Tech Stack
-Tecnología	Uso
-NestJS	Framework principal
-Prisma ORM	Acceso a BD y modelos
-MySQL	Base de datos
-JWT + Passport	Autenticación
-Nodemailer	Notificaciones por email
-Docker (opcional)	Infraestructura
-Class Validator	Validaciones
-📦 Instalación
+### 🛒 Funcionalidades E-Commerce
+- **Gestión de productos** - Catálogo completo con inventario
+- **Sistema de órdenes** - Procesamiento de pedidos
+- **Múltiples módulos** - Arquitectura escalable
+
+### 📧 Comunicaciones
+- **Email service** - Integración con Nodemailer
+- **Plantillas** - Sistema de emails transaccionales
+
+### 🗄️ Base de Datos
+- **Prisma ORM** - Type-safe database access
+- **MySQL** - Base de datos relacional
+- **Migraciones** - Control de versiones del schema
+
+## 🛠️ Stack Tecnológico
+
+| Tecnología | Propósito |
+|------------|-----------|
+| **NestJS 11** | Framework backend |
+| **TypeScript 5.7** | Lenguaje de programación |
+| **Prisma 6** | ORM y migraciones |
+| **MySQL** | Base de datos |
+| **Passport JWT** | Autenticación |
+| **Class Validator** | Validación de DTOs |
+| **Nodemailer** | Envío de emails |
+
+## 📦 Instalación
+
+### Requisitos Previos
+
+- Node.js >= 18.x
+- MySQL >= 8.x
+- npm o yarn
+
+### Pasos de Instalación
+
+```bash
+# 1. Clonar el repositorio
+git clone <repository-url>
+cd backend
+
+# 2. Instalar dependencias
 npm install
 
-🔧 Variables de entorno
+# 3. Configurar variables de entorno
+cp .env.example .env
+# Editar .env con tus credenciales
 
-Crear .env:
+# 4. Generar cliente Prisma
+npx prisma generate
 
-DATABASE_URL="mysql://root:Admin1234@localhost:3306/backend_nest_prisma"
+# 5. Ejecutar migraciones
+npx prisma migrate deploy
 
-JWT_SECRET="super-secret-key"
-JWT_EXPIRES_IN="3600"
+# 6. (Opcional) Seedear base de datos
+npx prisma db seed
+```
 
+## ⚙️ Configuración
+
+### Variables de Entorno
+
+Crear archivo `.env` en la raíz del proyecto:
+
+```env
+# Database
+DATABASE_URL="mysql://user:password@localhost:3306/ecommerce"
+
+# JWT
+JWT_SECRET="your-super-secret-jwt-key"
+JWT_EXPIRES_IN="7d"
+JWT_REFRESH_SECRET="your-refresh-secret"
+JWT_REFRESH_EXPIRES_IN="30d"
+
+# Email (Nodemailer)
 MAIL_HOST="smtp.gmail.com"
 MAIL_PORT=587
 MAIL_USER="your-email@gmail.com"
-MAIL_PASS="gmail-app-password"
-MAIL_FROM="your-email@gmail.com"
+MAIL_PASSWORD="your-app-password"
+MAIL_FROM="noreply@ecommerce.com"
 
-🗄️ Migraciones Prisma
-npx prisma migrate dev
+# App
+PORT=3000
+NODE_ENV="development"
+FRONTEND_URL="http://localhost:4200"
+```
 
-▶️ Ejecución
-Desarrollo
-npm run start:dev
+### Schema Prisma
 
-Producción
-npm run start:prod
+El proyecto incluye migraciones para:
+- ✅ Sistema de usuarios
+- ✅ Roles y permisos (RBAC)
+- ✅ Productos e inventario
+- ✅ Órdenes y detalles
+- ✅ Recuperación de contraseñas
 
-🛍️ Funcionalidades del E-Commerce
-👤 Usuarios
+## 🚀 Uso
 
-Registro y login
+### Comandos Disponibles
 
-Perfil del usuario
+```bash
+# Desarrollo
+npm run start:dev          # Modo watch con hot-reload
 
-Hash automático de contraseñas
+# Producción
+npm run build              # Compilar proyecto
+npm run start:prod         # Ejecutar en producción
 
-Recuperación de contraseña (opcional)
+# Base de datos
+npx prisma studio          # Explorador visual de BD
+npx prisma migrate dev     # Crear nueva migración
+npx prisma generate        # Regenerar cliente
 
-🛒 Productos
+# Testing
+npm run test               # Unit tests
+npm run test:e2e          # End-to-end tests
+npm run test:cov          # Cobertura de tests
 
-CRUD completo
+# Code Quality
+npm run lint              # Ejecutar ESLint
+npm run format            # Formatear código con Prettier
+```
 
-Activar/desactivar producto
+## 📡 Endpoints Principales
 
-Control de stock
+### Autenticación
 
-📦 Órdenes
+```http
+POST   /auth/register          # Registrar nuevo usuario
+POST   /auth/login             # Iniciar sesión
+POST   /auth/refresh           # Renovar token
+POST   /auth/forgot-password   # Solicitar reset
+POST   /auth/reset-password    # Resetear contraseña
+GET    /auth/profile           # Obtener perfil (protegido)
+```
 
-Crear pedido
+### Usuarios
 
-Descuento automático de stock
+```http
+GET    /users                  # Listar usuarios
+GET    /users/:id              # Obtener usuario
+POST   /users                  # Crear usuario
+PATCH  /users/:id              # Actualizar usuario
+DELETE /users/:id              # Eliminar usuario
+```
 
-Ver historial del usuario
+### Productos
 
-Estados: pending, paid, shipped, cancelled
+```http
+GET    /products               # Listar productos
+GET    /products/:id           # Obtener producto
+POST   /products               # Crear producto
+PATCH  /products/:id           # Actualizar producto
+DELETE /products/:id           # Eliminar producto
+```
 
-Listado para admins
+### Órdenes
 
-📬 Correos automáticos
+```http
+GET    /orders                 # Listar órdenes
+GET    /orders/:id             # Obtener orden
+POST   /orders                 # Crear orden
+PATCH  /orders/:id             # Actualizar orden
+DELETE /orders/:id             # Cancelar orden
+```
 
-Bienvenida
+### Roles y Permisos
 
-Confirmación de pedido
+```http
+GET    /roles                  # Listar roles
+POST   /roles                  # Crear rol
+GET    /permissions            # Listar permisos
+POST   /permissions            # Crear permiso
+```
 
-Emails transaccionales
+## 🏗️ Arquitectura del Proyecto
 
-📚 Endpoints principales (Resumen Empresarial)
-🔐 Auth
-Método	Endpoint	Descripción
-POST	/auth/register	Registra usuario
-POST	/auth/login	Devuelve JWT
-👤 Users
-Método	Endpoint	Descripción
-GET	/users/me	Perfil del usuario (JWT)
-🛍️ Products
-Método	Endpoint	Descripción
-GET	/products	Lista productos
-GET	/products/:id	Detalle
-POST	/products	Crear
-PATCH	/products/:id	Actualizar
-DELETE	/products/:id	Eliminar
-📦 Orders
-Método	Endpoint	Descripción
-POST	/orders	Crear Pedido (JWT)
-GET	/orders/me/list	Mis pedidos
-GET	/orders/:id	Ver pedido
-PATCH	/orders/:id/status	Cambiar estado
-🧪 Ejemplo de creación de pedido (POSTMAN)
-POST → /orders
-
-Header:
-
-Authorization: Bearer <token>
-
-
-Body:
-
-{
-  "items": [
-    { "productId": "UUID-PRODUCT", "quantity": 2 }
-  ]
-}
-
-👨‍💻 Arquitectura Empresarial
-
-Tu proyecto sigue una arquitectura de alto nivel:
-
+```
 src/
- ├── auth/
- ├── users/
- ├── products/
- ├── orders/
- ├── mailer/
- ├── common/
- └── prisma/
+├── auth/                    # Módulo de autenticación
+│   ├── dto/                # Data Transfer Objects
+│   ├── guards/             # Guards JWT
+│   ├── strategies/         # Passport strategies
+│   └── decorators/         # Custom decorators
+├── users/                   # Módulo de usuarios
+├── products/               # Módulo de productos
+├── orders/                 # Módulo de órdenes
+├── roles/                  # Módulo de roles
+├── permission/             # Módulo de permisos
+├── prisma/                 # Servicio Prisma
+├── common/                 # Utilidades compartidas
+└── main.ts                 # Punto de entrada
 
+prisma/
+├── schema.prisma           # Schema de base de datos
+└── migrations/             # Historial de migraciones
+```
 
-Ventajas:
+## 🔒 Seguridad
 
-➕ Escalable
+- ✅ Passwords hasheados con **bcrypt**
+- ✅ Autenticación mediante **JWT**
+- ✅ Validación de datos con **class-validator**
+- ✅ Guards personalizados para protección de rutas
+- ✅ CORS configurado
+- ✅ Rate limiting (recomendado para producción)
+- ✅ Helmet (recomendado para producción)
 
-➕ Fácil de mantener
+## 🧪 Testing
 
-➕ Separación clara por módulos
+```bash
+# Unit tests
+npm run test
 
-➕ Inyección de dependencias limpia
+# Tests con watch mode
+npm run test:watch
 
-🔐 Seguridad Implementada
+# Cobertura de código
+npm run test:cov
 
-Hash de contraseñas con bcrypt
+# E2E tests
+npm run test:e2e
+```
 
-Tokens firmados con JWT
+## 📝 Buenas Prácticas Implementadas
 
-Guard global para rutas protegidas
+- ✅ **Arquitectura modular** - Separación clara de responsabilidades
+- ✅ **DTOs tipados** - Validación automática de datos
+- ✅ **Dependency Injection** - Código testeable y mantenible
+- ✅ **ORM Type-safe** - Prisma para consultas seguras
+- ✅ **Error handling** - Manejo centralizado de errores
+- ✅ **Code formatting** - Prettier y ESLint configurados
 
-Validación estricta de entrada con DTOs
+## 🤝 Contribuir
 
-Manejo de errores empresarial
+1. Fork el proyecto
+2. Crea tu rama de feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
 
-📤 Scripts útiles
-npm run prisma:studio   # Visualizar DB
-npm run start:dev        # Desarrollo
-npm run build            # Compilar
+## 📄 Licencia
 
-🏆 Estado del Proyecto
+Este proyecto es privado - UNLICENSED
 
-Este backend está preparado para ambientes empresariales, portafolios profesionales, y aplicaciones reales de e-commerce.
+## 👤 Autor
 
-📄 Licencia
+**Tu Nombre**
+- GitHub: [@tuusuario](https://github.com/tuusuario)
+- Email: tu-email@ejemplo.com
 
-MIT – libre uso para proyectos personales y comerciales.
+## 🙏 Agradecimientos
+
+- NestJS por el increíble framework
+- Prisma por el excelente ORM
+- La comunidad de código abierto
+
+---
+
+<div align="center">
+
+**⭐ Si te gusta este proyecto, dale una estrella ⭐**
+
+Hecho con ❤️ usando NestJS
+
+</div>
