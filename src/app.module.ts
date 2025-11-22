@@ -8,7 +8,9 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
-import { PermissionsModule } from './permission/permissions.module'; // 👈 ESTE FALTABA
+import { PermissionsModule } from './permission/permissions.module';
+import { ProductsModule } from './products/products.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -16,11 +18,12 @@ import { PermissionsModule } from './permission/permissions.module'; // 👈 EST
       isGlobal: true,
     }),
 
-    // Módulos principales
     AuthModule,
     UsersModule,
     RolesModule,
-    PermissionsModule, // 👈 AGREGADO
+    PermissionsModule,
+    ProductsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

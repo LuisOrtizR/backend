@@ -1,7 +1,7 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
-@Catch() // Captura todos los errores
+@Catch()
 export class PrismaClientExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -9,28 +9,27 @@ export class PrismaClientExceptionFilter implements ExceptionFilter {
     let status = 500;
     let message = 'Internal server error';
 
-    // Manejo de errores de Prisma
-    if (exception instanceof Prisma.PrismaClientKnownRequestError) {
+    if (exception instanceof PrismaClientKnownRequestError) {
       switch (exception.code) {
-        case 'P2002': // Violación de unicidad
+        case 'P2002':
           status = 400;
           const targets = Array.isArray(exception.meta?.target)
             ? exception.meta.target
             : [];
           message = `${targets.join(', ')} already exists`;
           break;
+
         default:
           message = exception.message;
       }
-    }
-    // Manejo de errores HTTP de NestJS
-    else if (exception instanceof HttpException) {
+    } else if (exception instanceof HttpException) {
       status = exception.getStatus();
       const res = exception.getResponse();
-      message = typeof res === 'string' ? res : (res as any).message || JSON.stringify(res);
-    }
-    // Otros errores
-    else if (exception instanceof Error) {
+      message =
+        typeof res === 'string'
+          ? res
+          : (res as any).message || JSON.stringify(res);
+    } else if (exception instanceof Error) {
       message = exception.message;
     }
 

@@ -1,98 +1,186 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+🛒 E-Commerce Backend
+API REST empresarial construida con NestJS + Prisma + MySQL
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Un backend moderno, escalable y robusto para e-commerce, diseñado con arquitectura profesional, autenticación segura, manejo de inventario, órdenes, usuarios y notificaciones por correo.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+🚀 Características principales
 
-## Description
+✔️ Autenticación segura con JWT
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+✔️ Gestión completa de productos
 
-## Project setup
+✔️ Carrito + Órdenes + Estados
 
-```bash
-$ npm install
-```
+✔️ Control de inventario automático
 
-## Compile and run the project
+✔️ Envío de correos (Nodemailer)
 
-```bash
-# development
-$ npm run start
+✔️ Prisma ORM + MySQL
 
-# watch mode
-$ npm run start:dev
+✔️ Arquitectura modular y escalable
 
-# production mode
-$ npm run start:prod
-```
+✔️ Validación estricta con DTOs + Pipes
 
-## Run tests
+✔️ Listo para producción (Docker optional)
 
-```bash
-# unit tests
-$ npm run test
+🧱 Tech Stack
+Tecnología	Uso
+NestJS	Framework principal
+Prisma ORM	Acceso a BD y modelos
+MySQL	Base de datos
+JWT + Passport	Autenticación
+Nodemailer	Notificaciones por email
+Docker (opcional)	Infraestructura
+Class Validator	Validaciones
+📦 Instalación
+npm install
 
-# e2e tests
-$ npm run test:e2e
+🔧 Variables de entorno
 
-# test coverage
-$ npm run test:cov
-```
+Crear .env:
 
-## Deployment
+DATABASE_URL="mysql://root:Admin1234@localhost:3306/backend_nest_prisma"
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+JWT_SECRET="super-secret-key"
+JWT_EXPIRES_IN="3600"
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+MAIL_HOST="smtp.gmail.com"
+MAIL_PORT=587
+MAIL_USER="your-email@gmail.com"
+MAIL_PASS="gmail-app-password"
+MAIL_FROM="your-email@gmail.com"
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+🗄️ Migraciones Prisma
+npx prisma migrate dev
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+▶️ Ejecución
+Desarrollo
+npm run start:dev
 
-## Resources
+Producción
+npm run start:prod
 
-Check out a few resources that may come in handy when working with NestJS:
+🛍️ Funcionalidades del E-Commerce
+👤 Usuarios
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Registro y login
 
-## Support
+Perfil del usuario
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Hash automático de contraseñas
 
-## Stay in touch
+Recuperación de contraseña (opcional)
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+🛒 Productos
 
-## License
+CRUD completo
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Activar/desactivar producto
+
+Control de stock
+
+📦 Órdenes
+
+Crear pedido
+
+Descuento automático de stock
+
+Ver historial del usuario
+
+Estados: pending, paid, shipped, cancelled
+
+Listado para admins
+
+📬 Correos automáticos
+
+Bienvenida
+
+Confirmación de pedido
+
+Emails transaccionales
+
+📚 Endpoints principales (Resumen Empresarial)
+🔐 Auth
+Método	Endpoint	Descripción
+POST	/auth/register	Registra usuario
+POST	/auth/login	Devuelve JWT
+👤 Users
+Método	Endpoint	Descripción
+GET	/users/me	Perfil del usuario (JWT)
+🛍️ Products
+Método	Endpoint	Descripción
+GET	/products	Lista productos
+GET	/products/:id	Detalle
+POST	/products	Crear
+PATCH	/products/:id	Actualizar
+DELETE	/products/:id	Eliminar
+📦 Orders
+Método	Endpoint	Descripción
+POST	/orders	Crear Pedido (JWT)
+GET	/orders/me/list	Mis pedidos
+GET	/orders/:id	Ver pedido
+PATCH	/orders/:id/status	Cambiar estado
+🧪 Ejemplo de creación de pedido (POSTMAN)
+POST → /orders
+
+Header:
+
+Authorization: Bearer <token>
+
+
+Body:
+
+{
+  "items": [
+    { "productId": "UUID-PRODUCT", "quantity": 2 }
+  ]
+}
+
+👨‍💻 Arquitectura Empresarial
+
+Tu proyecto sigue una arquitectura de alto nivel:
+
+src/
+ ├── auth/
+ ├── users/
+ ├── products/
+ ├── orders/
+ ├── mailer/
+ ├── common/
+ └── prisma/
+
+
+Ventajas:
+
+➕ Escalable
+
+➕ Fácil de mantener
+
+➕ Separación clara por módulos
+
+➕ Inyección de dependencias limpia
+
+🔐 Seguridad Implementada
+
+Hash de contraseñas con bcrypt
+
+Tokens firmados con JWT
+
+Guard global para rutas protegidas
+
+Validación estricta de entrada con DTOs
+
+Manejo de errores empresarial
+
+📤 Scripts útiles
+npm run prisma:studio   # Visualizar DB
+npm run start:dev        # Desarrollo
+npm run build            # Compilar
+
+🏆 Estado del Proyecto
+
+Este backend está preparado para ambientes empresariales, portafolios profesionales, y aplicaciones reales de e-commerce.
+
+📄 Licencia
+
+MIT – libre uso para proyectos personales y comerciales.

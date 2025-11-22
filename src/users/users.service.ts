@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { Prisma } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class UsersService {
@@ -37,10 +37,7 @@ export class UsersService {
 
       return user;
     } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
+      if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
         throw new BadRequestException(`The email "${email}" is already registered`);
       }
       throw error;
@@ -88,10 +85,7 @@ export class UsersService {
 
       return this.findOne(id);
     } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
+      if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
         throw new BadRequestException(`The email "${data.email}" is already in use`);
       }
       throw error;
@@ -137,10 +131,7 @@ export class UsersService {
         include: this.userInclude,
       });
     } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
+      if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
         throw new BadRequestException(`The email "${data.email}" is already in use`);
       }
       throw error;
