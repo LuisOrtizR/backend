@@ -1,12 +1,13 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { CreateUserService } from '../users/services/create-user.service';
+import { GetUserService } from '../users/services/get-user.service';
 import { Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import * as nodemailer from 'nodemailer';
-import { ConfigService } from '@nestjs/config';
 import { RegisterDto } from './dto/register.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
@@ -17,9 +18,10 @@ export class AuthService {
   private transporter;
 
   constructor(
-    private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
+    private readonly createUserService: CreateUserService,
+    private readonly getUserService: GetUserService,
     private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {
     this.transporter = nodemailer.createTransport({
@@ -33,15 +35,13 @@ export class AuthService {
     });
   }
 
-  // -------------------------------
-  // Register customer
-  // -------------------------------
   async register(dto: RegisterDto): Promise<RegisterResponseDto> {
     const clientRole = await this.prisma.role.findUnique({ where: { name: 'Customer' } });
     if (!clientRole) throw new BadRequestException('Customer role not found');
 
     try {
-      const createdUser = await this.usersService.createUser(dto.email, dto.password, clientRole.id);
+      const result = await this.createUserService.execute(dto.email, dto.password, clientRole.id);
+      const createdUser = result.user; // ✅ extraer el user del resultado
 
       const roleNames = createdUser.roles?.map(r => r.role.name) || [];
 
@@ -68,11 +68,8 @@ export class AuthService {
     }
   }
 
-  // -------------------------------
-  // Validate user for login
-  // -------------------------------
   async validateUser(email: string, password: string): Promise<User> {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const user = await this.getUserService.executeByEmail(email);
     if (!user) throw new BadRequestException('Invalid credentials');
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -81,9 +78,6 @@ export class AuthService {
     return user;
   }
 
-  // -------------------------------
-  // Login and generate JWT
-  // -------------------------------
   async login(user: User) {
     const payload = { email: user.email, sub: user.id };
     return {
@@ -92,11 +86,8 @@ export class AuthService {
     };
   }
 
-  // -------------------------------
-  // Forgot Password
-  // -------------------------------
   async forgotPassword(dto: ForgotPasswordDto) {
-    const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    const user = await this.getUserService.executeByEmail(dto.email);
     if (!user) return { message: 'If the email exists, a reset link has been sent' };
 
     const token = randomBytes(32).toString('hex');
@@ -117,9 +108,6 @@ export class AuthService {
     return { message: 'If the email exists, a reset link has been sent' };
   }
 
-  // -------------------------------
-  // Reset Password
-  // -------------------------------
   async resetPassword(dto: ResetPasswordDto) {
     const reset = await this.prisma.passwordReset.findUnique({ where: { token: dto.token } });
     if (!reset || reset.expiresAt < new Date()) throw new BadRequestException('Invalid or expired token');
