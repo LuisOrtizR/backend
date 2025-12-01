@@ -1,3 +1,4 @@
+// update-product.dto.ts
 import { IsString, IsOptional, IsNumber, Min } from 'class-validator';
 
 export class UpdateProductDto {

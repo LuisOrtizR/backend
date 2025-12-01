@@ -11,7 +11,17 @@ export class GetUserService {
     if (!user) throw new NotFoundException(`User with ID "${id}" not found`);
     return user;
   }
-  async executeByEmail(email: string): Promise<User | null> {
-    return this.prisma.user.findUnique({ where: { email } });
-  }
+  async executeByEmail(email: string): Promise<any | null> {
+  return this.prisma.user.findUnique({
+    where: { email },
+    include: {
+      roles: {
+        include: {
+          role: true
+        }
+      }
+    }
+  });
+}
+
 }

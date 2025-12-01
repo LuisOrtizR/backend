@@ -1,4 +1,5 @@
-import { IsOptional, IsString, IsNumber } from 'class-validator';
+// filter-product.dto.ts
+import { IsOptional, IsString, IsNumber, Min } from 'class-validator';
 
 export class FilterProductDto {
   @IsOptional()
@@ -7,15 +8,21 @@ export class FilterProductDto {
 
   @IsOptional()
   @IsNumber()
+  @Min(0)
   minPrice?: number;
 
   @IsOptional()
   @IsNumber()
+  @Min(0)
   maxPrice?: number;
 
   @IsOptional()
+  @IsNumber()
+  @Min(1)
   page?: number;
 
   @IsOptional()
+  @IsNumber()
+  @Min(1)
   limit?: number;
 }

@@ -78,13 +78,20 @@ export class AuthService {
     return user;
   }
 
-  async login(user: User) {
-    const payload = { email: user.email, sub: user.id };
-    return {
-      message: 'Login successful',
-      access_token: this.jwtService.sign(payload),
-    };
-  }
+  async login(user: any) {
+  const roles = user.roles?.map(r => r.role.name) || [];
+
+  const payload = { 
+    email: user.email, 
+    sub: user.id,
+    roles,
+  };
+
+  return {
+    message: 'Login successful',
+    access_token: this.jwtService.sign(payload),
+  };
+}
 
   async forgotPassword(dto: ForgotPasswordDto) {
     const user = await this.getUserService.executeByEmail(dto.email);

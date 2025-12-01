@@ -1,15 +1,4 @@
-import {
-  Controller,
-  Post,
-  Get,
-  Body,
-  Param,
-  Patch,
-  Delete,
-  Query,
-  UsePipes,
-  ValidationPipe
-} from '@nestjs/common';
+import { Controller, Post, Get, Patch, Delete, Param, Body, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';

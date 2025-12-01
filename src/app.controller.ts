@@ -6,13 +6,11 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  // GET /
   @Get()
-  getWelcome(): string {
-    return this.appService.getWelcomeMessage();
+  getWelcome() {
+    return this.appService.getWelcomePage();
   }
 
-  // GET /health
   @Get('health')
   getHealth() {
     return this.appService.getHealthStatus();
